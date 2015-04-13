@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2.7
 
 import  sys
 import  matplotlib.pyplot as plt
@@ -46,8 +46,8 @@ def     option(argv):
     for x in range(0, 200):
         result.append(normalDistribution((x - expectedValue) / standardDeviation) * 100)
     plt.plot(result)
-    plt.title("Probabilité (en %) en fonction du QI")
-    plt.ylabel("probabilité (%)")
+    plt.title("Probabilite (en %) en fonction du QI")
+    plt.ylabel("probabilite (%)")
     plt.xlabel("QI")
     plt.show()
     
@@ -56,8 +56,7 @@ def     option2(argv):
     standardDeviation = float(argv[2])
     x = int(argv[3])
     result = normalDistribution((x - expectedValue) / standardDeviation)
-    print("%0.2f%% des personnes ont un QI inférieur à %d"
-          % ((result * 100), x))
+    print("%0.2f%% des personnes ont un QI inferieur a %d" % ((result * 100), x))
 
 def     option3(argv):
     result = 0
