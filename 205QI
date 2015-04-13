@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+import  sys
+import  matplotlib.pyplot as plt
+import  numpy as np
+from    math import *
+
+def     checkArgs(argv):
+    try:
+        for i in range(1, len(sys.argv)):
+            nb = float(argv[i])
+            if nb < 0 or nb > 200:
+                raise RuntimeError(argv[i] + ' given. Arguments must be between 0 and 200')
+    except ValueError:
+        raise RuntimeError('Arguments must be a number.')
+    return True
+
+def     normalDistribution(x):
+    if x == 0:
+        return 0.5
+    if x >= 7.56:
+        return 1.0
+    if x <= -7.56:
+        return 0.0
+    u = abs(x)
+    n = int(u * 2000)
+    du = u / n
+    k = 1 / sqrt(2 * pi)
+    u1 = 0
+    f1 = k
+    p = 0.5
+    for i in range(0, n):
+        u2 = u1 + du
+        f2 = k * exp(-0.5 * u2 * u2)
+        p = p + (f1 + f2) * du * 0.5
+        u1 = u2
+        f1 = f2
+    if x > 0:
+        return p
+    return 1.0 - p
+
+def     option(argv):
+    result = list()
+    expectedValue = float(argv[1])
+    standardDeviation = float(argv[2])
+    for x in range(0, 200):
+        result.append(normalDistribution((x - expectedValue) / standardDeviation) * 100)
+    plt.plot(result)
+    plt.title("Probabilité (en %) en fonction du QI")
+    plt.ylabel("probabilité (%)")
+    plt.xlabel("QI")
+    plt.show()
+    
+def     option2(argv):
+    expectedValue = float(argv[1])
+    standardDeviation = float(argv[2])
+    x = int(argv[3])
+    result = normalDistribution((x - expectedValue) / standardDeviation)
+    print("%0.2f%% des personnes ont un QI inférieur à %d"
+          % ((result * 100), x))
+
+def     option3(argv):
+    result = 0
+    expectedValue = float(argv[1])
+    standardDeviation = float(argv[2])
+    qi = int(argv[3])
+    qi_2 = int(argv[4])
+    result = (normalDistribution((qi_2 - expectedValue) / standardDeviation)) - (normalDistribution((qi - expectedValue) / standardDeviation))
+    print("%0.2f%% des personnes ont un QI compris entre %d et %d" % (result * 100, qi, qi_2))
+
+def     start(argv):
+    options = {
+        3 : option,
+        4 : option2,
+        5 : option3,
+        }
+    options[len(sys.argv)](sys.argv)
+
+def     main():
+    try:
+        if len(sys.argv) < 3 or len(sys.argv) > 5:
+            print("Usage: ./205QI <expected value> <standard deviation> <qi> <qi_2>")
+        else:
+            if checkArgs(sys.argv) is True:
+                start(sys.argv)
+        return True
+    except Exception as err:
+        sys.stderr.write("ERROR: %s\nProgram is exiting now.\n" % str(err))
+        return False
+
+if __name__ == '__main__':
+    sys.exit(main())
