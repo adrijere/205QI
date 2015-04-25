@@ -10,12 +10,12 @@ def     checkArgs(argv):
         for i in range(1, len(sys.argv)):
             nb = float(argv[i])
             if nb < 0 or nb > 200:
-                raise RuntimeError(argv[i] + ' given. Arguments must be between 0 and 200')
+                raise RuntimeError(argv[i] + ' incorrect. Les arguments doivent etre entre 0 et 200.')
     except ValueError:
-        raise RuntimeError('Arguments must be a number.')
+        raise RuntimeError('Les arguments doivent etre des nombres.')
     return True
 
-def     normalDistribution(x):
+def     Distrib(x):
     if x == 0:
         return 0.5
     if x >= 7.56:
@@ -41,10 +41,10 @@ def     normalDistribution(x):
 
 def     option(argv):
     result = list()
-    expectedValue = float(argv[1])
-    standardDeviation = float(argv[2])
+    esperance = float(argv[1])
+    ecart_type = float(argv[2])
     for x in range(0, 200):
-        result.append(normalDistribution((x - expectedValue) / standardDeviation) * 100)
+        result.append(Distrib((x - esperance) / ecart_type) * 100)
     plt.plot(result)
     plt.title("Probabilite (en %) en fonction du QI")
     plt.ylabel("probabilite (%)")
@@ -52,19 +52,19 @@ def     option(argv):
     plt.show()
     
 def     option2(argv):
-    expectedValue = float(argv[1])
-    standardDeviation = float(argv[2])
+    esperance = float(argv[1])
+    ecart_type = float(argv[2])
     x = int(argv[3])
-    result = normalDistribution((x - expectedValue) / standardDeviation)
+    result = Distrib((x - esperance) / ecart_type)
     print("%0.2f%% des personnes ont un QI inferieur a %d" % ((result * 100), x))
 
 def     option3(argv):
     result = 0
-    expectedValue = float(argv[1])
-    standardDeviation = float(argv[2])
+    esperance = float(argv[1])
+    ecart_type = float(argv[2])
     qi = int(argv[3])
     qi_2 = int(argv[4])
-    result = (normalDistribution((qi_2 - expectedValue) / standardDeviation)) - (normalDistribution((qi - expectedValue) / standardDeviation))
+    result = (Distrib((qi_2 - esperance) / ecart_type)) - (Distrib((qi - esperance) / ecart_type))
     print("%0.2f%% des personnes ont un QI compris entre %d et %d" % (result * 100, qi, qi_2))
 
 def     start(argv):
@@ -78,13 +78,13 @@ def     start(argv):
 def     main():
     try:
         if len(sys.argv) < 3 or len(sys.argv) > 5:
-            print("Usage: ./205QI <expected value> <standard deviation> <qi> <qi_2>")
+            print("Usage: ./205QI <esperance> <ecart type> <qi> <qi_2>")
         else:
             if checkArgs(sys.argv) is True:
                 start(sys.argv)
         return True
     except Exception as err:
-        sys.stderr.write("ERROR: %s\nProgram is exiting now.\n" % str(err))
+        sys.stderr.write("ERROR: %s\nLe programme quitte.\n" % str(err))
         return False
 
 if __name__ == '__main__':
